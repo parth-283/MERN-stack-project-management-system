@@ -13,6 +13,7 @@ const schema = yup
         lastName: yup.string().required("This field is required."),
         phone: yup.string().required("This field is required."),
         password: yup.string().required("This field is required."),
+        role: yup.string().required("This field is required."),
     })
     .required()
 
@@ -28,15 +29,16 @@ const Register = () => {
             firstName: "",
             lastName: "",
             phone: "",
-            password: ""
+            password: "",
+            role: ""
         },
     })
 
-    useEffect(() => {
-        if (auth.status === 'register/success') {
-            navigate('/login')
-        }
-    }, [auth])
+    // useEffect(() => {
+    //     if (auth.status === 'register/success') {
+    //         navigate('/login')
+    //     }
+    // }, [auth])
 
     const onSubmit = async (data) => {
         dispatch(registerAsync(data))
@@ -80,6 +82,17 @@ const Register = () => {
                     <label htmlFor='password' className='form-label'>Password</label>
                     <input id="password" {...register("password")} placeholder='Enter your password' />
                     {errors.password && <p className='error-message'>{errors.password.message}</p>}
+                </div>
+
+                <div>
+                    <label htmlFor='role' className='form-label'>Role</label>
+                    <input list="roles" {...register("role")} placeholder='Select role' />
+                    <datalist id="roles" >
+                        <option value="Admin"></option>
+                        <option value="Team"></option>
+                        <option value="Manager"></option>
+                    </datalist>
+                    {errors.role && <p className='error-message'>{errors.role.message}</p>}
                 </div>
 
                 <div className='button-group'>

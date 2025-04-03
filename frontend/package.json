@@ -3,9 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@hookform/resolvers": "^5.0.0",
+    "@mui/material": "^7.0.1",
+    "@mui/x-data-grid-generator": "^7.28.2",
     "@reduxjs/toolkit": "^2.6.1",
     "cra-template-redux": "2.0.0",
+    "js-cookie": "^3.0.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.55.0",
@@ -14,6 +19,7 @@
     "react-scripts": "5.0.1",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
+    "sass": "^1.86.2",
     "web-vitals": "^4.2.4",
     "yup": "^1.6.1"
   },

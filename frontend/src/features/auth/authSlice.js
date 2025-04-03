@@ -39,7 +39,7 @@ export const loginSlice = createSlice({
     initialState,
     reducers: {
         logOut: (state) => {
-            state.token = '';
+            state.token = null;
             state.user = null;
             state.message = { isError: false, text: "" };
         },
@@ -51,7 +51,6 @@ export const loginSlice = createSlice({
             })
             .addCase(loginAsync.fulfilled, (state, action) => {
                 state.status = 'login/success';
-                state.token = action.payload.access_token;
                 state.user = action.payload.user;
                 state.message = { isError: false, text: "Successfully login!", page: 'login' };
             })

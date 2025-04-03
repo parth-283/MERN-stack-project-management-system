@@ -4,11 +4,11 @@ import handleEncryptDecrypt from "../Utils/passwordEncript.mjs"
 
 const addUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, password, phone } = req.body
+        const { firstName, lastName, email, password, phone, role } = req.body
 
         const encryptedPassword = await handleEncryptDecrypt.passwordHash(password);
 
-        const newUser = new User({ firstName, lastName, email, password: encryptedPassword, phone })
+        const newUser = new User({ firstName, lastName, email, password: encryptedPassword, phone, role: role ? role : 'Admin' })
 
         const user = await newUser.save()
 
@@ -43,14 +43,39 @@ const login = async (req, res) => {
         }
 
         console.log(`Generate token for user login.`.underline.cyan);
-        const token = await JWTToken.generateJsonWebToken({ email: email, id: users._id });
+        const token = await JWTToken.generateJsonWebToken({ email: email, id: users._id, role: users.role });
 
         await User.updateOne({ email, isDeleted: false }, { isAuthenticated: true });
 
-        res.status(200).json({ data: { access_token: token, user: { email: users.email, firstName: users.firstName, lastName: users.lastName, phone: users.phone } }, message: "User login successfully.", isSuccessful: true });
+        // Set the httpOnly cookie
+        res.cookie("access_token", token, {
+            httpOnly: true, // Prevent access by JavaScript
+            secure: true, // Ensures the cookie is sent over HTTPS
+            sameSite: "strict", // Protects against CSRF
+            maxAge: 3600000, // 1 hour
+        });
+
+        res.status(200).json({ message: "Logged in successfully", isSuccessful: true });
+        // res.status(200).json({ data: { access_token: token, user: { email: users.email, firstName: users.firstName, lastName: users.lastName, phone: users.phone, role: users.role } }, message: "User login successfully.", isSuccessful: true });
     } catch (error) {
         console.log(`Error on user login request. Error: ${JSON.stringify(error)}`.underline.red);
         res.status(error?.status || 500).json({ message: error.message || "Somethings wen wrong!", isSuccessful: false });
+    }
+}
+
+const protect = async (req, res) => {
+    const token = req.cookies.authToken;
+
+    if (!token) {
+        return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    try {
+        const user = jwt.verify(token, secretKey);
+
+        res.json({ message: "Welcome!", user });
+    } catch (err) {
+        res.status(403).json({ error: "Invalid or expired token" });
     }
 }
 
@@ -66,7 +91,14 @@ const logout = async (req, res) => {
             throw error;
         }
 
-        res.status(200).json({ message: "User logged out successfully.", isSuccessful: true });
+        res.clearCookie("authToken", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+        });
+
+        res.status(200).json({ message: "Logged out successfully.", isSuccessful: true });
+        // res.status(200).json({ message: "User logged out successfully.", isSuccessful: true });
     } catch (error) {
         console.log(`Error on user login request. Error: ${JSON.stringify(error)}`.underline.red);
         res.status(error?.status || 500).json({ message: error.message || "Somethings wen wrong!", isSuccessful: false });
@@ -121,5 +153,6 @@ export default {
     logout,
     addUser,
     getUser,
-    updateUser
+    updateUser,
+    protect
 }

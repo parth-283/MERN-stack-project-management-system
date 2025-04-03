@@ -6,7 +6,7 @@ import loginReducer from '../features/auth/authSlice.js';
 const persistConfig = {
   key: 'auth',
   storage,
-  whitelist: ['token', 'user']
+  whitelist: [ 'user']
 };
 
 const persistedReducer = persistReducer(persistConfig, loginReducer);

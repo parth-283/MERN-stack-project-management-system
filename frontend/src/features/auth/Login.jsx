@@ -15,7 +15,6 @@ const schema = yup
 
 const Login = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     let auth = useSelector((state) => state.auth)
 
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -26,11 +25,11 @@ const Login = () => {
         },
     })
 
-    useEffect(() => {
-        if (auth.status === 'login/success') {
-            navigate('/dashboard')
-        }
-    }, [auth])
+    // useEffect(() => {
+    //     if (auth.status === 'login/success') {
+    //         navigate('/dashboard')
+    //     }
+    // }, [auth])
 
     const onSubmit = async (data) => {
         dispatch(loginAsync(data))
