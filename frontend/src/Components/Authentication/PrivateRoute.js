@@ -24,10 +24,4 @@ const PrivateRoute = ({ children }) => {
     return children;
 };
 
-// const PrivateRoute = ({ children }) => {
-//     const auth = useSelector((state) => state.auth);
-
-//     return !auth.token ? children : <Navigate to="/dashboard" />;
-// };
-
 export default PrivateRoute;

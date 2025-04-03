@@ -26,16 +26,13 @@ const Login = () => {
         },
     })
 
-    // useEffect(() => {
-    //     if (auth.status === 'login/success') {
-    //         navigate('/dashboard')
-    //     }
-    // }, [auth])
-
     const onSubmit = async (data) => {
         dispatch(loginAsync(data))
+
         setTimeout(() => {
-            navigate('/dashboard')
+            if (auth.status === 'login/success') {
+                navigate(["Team"].includes(auth.user.role) ? '/teams' : '/dashboard')
+            }
         }, 200);
     }
 

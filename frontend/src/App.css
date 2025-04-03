@@ -28,10 +28,10 @@ li {
   margin-bottom: 1rem;
 }
 
-li>div {
+/* li>div {
   width: 5rem;
   text-align: start;
-}
+} */
 
 li button {
   width: 9rem;

@@ -8,6 +8,9 @@ import Login from "./features/auth/Login";
 import ProtectedRoute from "./Components/Authentication/ProtectedRoute";
 import PrivateRoute from "./Components/Authentication/PrivateRoute";
 import Dashboard from "./features/Dashboard/Dashboard";
+import Teams from "./features/Teams";
+import Tasks from "./features/Tasks";
+import RestrictedPage from "./RestrictedPage";
 
 const router = createBrowserRouter([
     {
@@ -16,16 +19,24 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
             {
+                path: "/access-denied",
+                element: <RestrictedPage />
+            },
+            {
                 path: "/task",
-                element: <ProtectedRoute> <Task /> </ProtectedRoute>
+                element: <ProtectedRoute roles={['Manager', 'Team']}> <Tasks /> </ProtectedRoute>
             },
             {
                 path: "/dashboard",
-                element: <ProtectedRoute> <Dashboard /> </ProtectedRoute>
+                element: <ProtectedRoute roles={['Admin']}> <Dashboard /> </ProtectedRoute>
+            },
+            {
+                path: "/teams",
+                element: <ProtectedRoute roles={['Admin', 'Team', 'Manager']}> <Teams /> </ProtectedRoute>
             },
             {
                 path: "/board",
-                element: <ProtectedRoute> <Board /> </ProtectedRoute>
+                element: <ProtectedRoute roles={['Team']}> <Board /> </ProtectedRoute>
             },
             {
                 path: "/login",
@@ -34,7 +45,7 @@ const router = createBrowserRouter([
             {
                 path: "/register",
                 element: <PrivateRoute> <Register /> </PrivateRoute>
-            },
+            }
         ]
     }
 ]);

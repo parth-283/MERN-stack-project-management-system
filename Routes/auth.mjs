@@ -9,6 +9,6 @@ router.post("/login", authController.login);
 router.get("/logout", authenticationCheck, authController.logout);
 router.get("/protect", authenticationCheck, authController.protect);
 router.get("/me", authenticationCheck, authController.getUser);
-router.patch("/update", authenticationCheck, authController.updateUser);
+router.put("/update", authenticationCheck, authController.updateUser);
 
 export default router;

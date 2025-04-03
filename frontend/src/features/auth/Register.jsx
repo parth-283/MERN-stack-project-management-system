@@ -34,14 +34,14 @@ const Register = () => {
         },
     })
 
-    // useEffect(() => {
-    //     if (auth.status === 'register/success') {
-    //         navigate('/login')
-    //     }
-    // }, [auth])
-
     const onSubmit = async (data) => {
         dispatch(registerAsync(data))
+
+        setTimeout(() => {
+            if (auth.status === 'register/success') {
+                navigate(["Team"].includes(auth.user.role) ? '/teams' : '/dashboard')
+            }
+        }, 200);
     }
 
     return (

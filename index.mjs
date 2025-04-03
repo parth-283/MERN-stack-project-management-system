@@ -10,6 +10,8 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 /* Routes */
 import authRoutes from "./Routes/auth.mjs"
+import projectRoutes from "./Routes/project.mjs"
+import tasksRoutes from "./Routes/task.mjs"
 import cookieParser from "cookie-parser";
 
 configDotenv()
@@ -52,6 +54,8 @@ wss.on('connection', (ws) => {
 });
 
 app.use("/api/auth", authRoutes)
+app.use("/api/projects", projectRoutes)
+app.use("/api/tasks", tasksRoutes)
 
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));

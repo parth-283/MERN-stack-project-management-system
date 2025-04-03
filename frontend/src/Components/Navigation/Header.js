@@ -26,15 +26,18 @@ const Header = () => {
                 <nav>
                     <ul>
                         {auth.isAuth ? <>
-                            <li>
+                            {["Admin"].includes(auth.user.role) && <li>
                                 <NavLink to={`/dashboard`} className={({ isActive, isPending }) => isActive ? "active" : isPending ? "pending" : ""}> Dashboard</NavLink>
-                            </li>
-                            <li>
+                            </li>}
+                            {['Manager', 'Team'].includes(auth.user.role) && <li>
                                 <NavLink to={`/task`} className={({ isActive, isPending }) => isActive ? "active" : isPending ? "pending" : ""}> Tasks </NavLink>
-                            </li>
-                            <li>
+                            </li>}
+                            {!["Admin", "Manager"].includes(auth.user.role) && <li>
                                 <NavLink to={`/board`} className={({ isActive, isPending }) => isActive ? "active" : isPending ? "pending" : ""}> Board </NavLink>
-                            </li>
+                            </li>}
+                            {['Admin', 'Team', 'Manager'].includes(auth.user.role) && <li>
+                                <NavLink to={`/teams`} className={({ isActive, isPending }) => isActive ? "active" : isPending ? "pending" : ""}> Teams </NavLink>
+                            </li>}
                             <li>
                                 <NavLink to="#" onClick={() => handleLogOut()}>Log out</NavLink>
                             </li>

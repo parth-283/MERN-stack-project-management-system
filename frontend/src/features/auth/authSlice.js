@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import authService from '../../Services/auth.js'
-import Cookies from 'js-cookie';
 
 const initialState = {
     isAuth: false,
@@ -15,7 +14,7 @@ export const loginAsync = createAsyncThunk(
         let response = await authService.login(data)
 
         if (response.isSuccessful) {
-            return response.data
+            return response
         } else {
             throw new Error(response.message);
         }
@@ -28,7 +27,7 @@ export const registerAsync = createAsyncThunk(
         let response = await authService.register(data)
 
         if (response.isSuccessful) {
-            return response.data
+            return response
         } else {
             throw new Error(response.message);
         }
@@ -41,7 +40,7 @@ export const logOutAsync = createAsyncThunk(
         let response = await authService.logOut(data)
 
         if (response.isSuccessful) {
-            return response.data
+            return response
         } else {
             throw new Error(response.message);
         }
@@ -54,7 +53,7 @@ export const verifyAuthAsync = createAsyncThunk(
         let response = await authService.verifyAuth(data)
 
         if (response.isSuccessful) {
-            return response.data
+            return response
         } else {
             throw new Error(response.message);
         }
@@ -78,9 +77,9 @@ export const loginSlice = createSlice({
             })
             .addCase(loginAsync.fulfilled, (state, action) => {
                 state.status = 'login/success';
-                state.user = action.payload.user;
+                state.user = action.payload.data.user;
                 state.isAuth = true
-                state.message = { isError: false, text: "Successfully login!", page: 'login' };
+                state.message = { isError: false, text: action.payload.message, page: 'login' };
             })
             .addCase(loginAsync.rejected, (state, action) => {
                 state.status = 'login/failed';
@@ -91,8 +90,8 @@ export const loginSlice = createSlice({
             })
             .addCase(registerAsync.fulfilled, (state, action) => {
                 state.status = 'register/success';
-                state.user = action.payload;
-                state.message = { isError: false, text: "Successfully login!", page: 'register' };
+                state.user = action.payload.data;
+                state.message = { isError: false, text: action.payload.message, page: 'register' };
             })
             .addCase(registerAsync.rejected, (state, action) => {
                 state.status = 'register/failed';
@@ -105,7 +104,7 @@ export const loginSlice = createSlice({
                 state.status = 'logout/success';
                 state.user = null;
                 state.isAuth = false;
-                state.message = { isError: false, text: "User successfully logout!", page: 'logout' };
+                state.message = { isError: false, text: action.payload.message, page: 'logout' };
             })
             .addCase(logOutAsync.rejected, (state, action) => {
                 state.status = 'logout/failed';
@@ -116,8 +115,8 @@ export const loginSlice = createSlice({
             })
             .addCase(verifyAuthAsync.fulfilled, (state, action) => {
                 state.status = 'verifyAuth/success';
-                state.isAuth = action.payload.isAuth;
-                state.message = { isError: false, text: "Successfully login!", page: 'verifyAuth' };
+                state.isAuth = action.payload.data.isAuth;
+                state.message = { isError: false, text: action.payload.message, page: 'verifyAuth' };
             })
             .addCase(verifyAuthAsync.rejected, (state, action) => {
                 state.status = 'verifyAuth/failed';
