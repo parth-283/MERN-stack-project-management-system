@@ -1,4 +1,4 @@
-import { postWithOutToken } from "../Utils/module"
+import { get, postWithOutToken } from "../Utils/module"
 
 
 const register = (data) => {
@@ -9,4 +9,12 @@ const login = (data) => {
     return postWithOutToken("api/auth/login", data)
 }
 
-export default { register, login }
+const logOut = () => {
+    return get("api/auth/logout")
+}
+
+const verifyAuth = () => {
+    return get("api/auth/protect")
+}
+
+export default { register, login, logOut, verifyAuth }

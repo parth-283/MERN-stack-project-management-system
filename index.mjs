@@ -10,6 +10,7 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 /* Routes */
 import authRoutes from "./Routes/auth.mjs"
+import cookieParser from "cookie-parser";
 
 configDotenv()
 
@@ -24,8 +25,11 @@ mongoose.connect(process.env.MONGOOSE_URI, {
 })
 
 const app = express();
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// Middleware
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 
 const server = http.createServer(app);
@@ -48,8 +52,6 @@ wss.on('connection', (ws) => {
 });
 
 app.use("/api/auth", authRoutes)
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));

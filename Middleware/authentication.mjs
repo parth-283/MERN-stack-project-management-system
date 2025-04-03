@@ -3,7 +3,8 @@ import JWTToken from "../Utils/generateJWTToken.mjs"
 const authenticationCheck = async (req, res, next) => {
     try {
 
-        const token = req.headers.authorization.replace('Bearer ', "");
+        // const token = req.headers.authorization.replace('Bearer ', "");
+        const token = req.cookies.access_token
 
         if (!token) {
             const error = new Error('Token not found!');

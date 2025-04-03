@@ -1,4 +1,3 @@
-import Cookies from "js-cookie"
 
 const fetchMapper = async (url, responseHeader) => {
     return await fetch(`${url}`, responseHeader)
@@ -12,40 +11,37 @@ const fetchMapper = async (url, responseHeader) => {
         })
 }
 
-const getOption = (method, isAuth, data) => {
-    debugger
-    let token = Cookies.get('access_token')
-    // let token = isAuth ? { Authorization: `Bearer ${localStorage.getItem("token")}` } : null
+const getOption = (method, data) => {
+    let body = data ? { body: JSON.stringify(data) } : {}
     return {
         method: method,
         headers: {
             "Content-Type": "application/json",
-            ...token
         },
-        body: JSON.stringify(data),
+        ...body
     }
 }
 
 export const postWithOutToken = async (url, data) => {
-    return fetchMapper(url, getOption("POST", false, data))
+    return fetchMapper(url, getOption("POST", data))
 }
 
 export const putWithOutToken = async (url, data) => {
-    return fetchMapper(url, getOption("PUT", false, data))
+    return fetchMapper(url, getOption("PUT", data))
 }
 
-export const getWithOutToken = async (url, data) => {
-    return fetchMapper(url, getOption("GET", false, data))
+export const getWithOutToken = async (url) => {
+    return fetchMapper(url, getOption("GET"))
 }
 
 export const post = async (url, data) => {
-    return fetchMapper(url, getOption("POST", true, data))
+    return fetchMapper(url, getOption("POST", data))
 }
 
 export const put = async (url, data) => {
-    return fetchMapper(url, getOption("PUT", true, data))
+    return fetchMapper(url, getOption("PUT", data))
 }
 
-export const get = async (url, data) => {
-    return fetchMapper(url, getOption("GET", true, data))
+export const get = async (url) => {
+    return fetchMapper(url, getOption("GET"))
 }

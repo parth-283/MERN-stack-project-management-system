@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { logOut } from '../../features/auth/authSlice'
+import { logOutAsync } from '../../features/auth/authSlice'
 
 const Header = () => {
     const dispatch = useDispatch()
@@ -9,9 +9,10 @@ const Header = () => {
     let auth = useSelector((state) => state.auth)
 
     const handleLogOut = async () => {
-        dispatch(logOut())
-        navigate('/login', { replace: true });
-
+        dispatch(logOutAsync())
+        setTimeout(() => {
+            navigate('/login', { replace: true });
+        }, 200)
     }
 
     return (
@@ -19,12 +20,12 @@ const Header = () => {
             <header>
 
                 <div className='logo'>
-                    <Link to={'/'}>PMT</Link>
+                    <Link to={auth.isAuth ? '/dashboard' : "/login"}>PMT</Link>
                 </div>
 
                 <nav>
                     <ul>
-                        {auth.token ? <>
+                        {auth.isAuth ? <>
                             <li>
                                 <NavLink to={`/dashboard`} className={({ isActive, isPending }) => isActive ? "active" : isPending ? "pending" : ""}> Dashboard</NavLink>
                             </li>

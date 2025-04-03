@@ -2,12 +2,12 @@ import { createBrowserRouter } from "react-router-dom";
 import Root from "./routes/root";
 import ErrorPage from "./error-page";
 import Task from "./routes/Task";
-import Dashboard from "./routes/Dashboard";
 import Board from "./routes/Board";
 import Register from "./features/auth/Register";
 import Login from "./features/auth/Login";
 import ProtectedRoute from "./Components/Authentication/ProtectedRoute";
 import PrivateRoute from "./Components/Authentication/PrivateRoute";
+import Dashboard from "./features/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
     {

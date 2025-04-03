@@ -55,7 +55,7 @@ const login = async (req, res) => {
             maxAge: 3600000, // 1 hour
         });
 
-        res.status(200).json({ message: "Logged in successfully", isSuccessful: true });
+        res.status(200).json({ message: "Logged in successfully", data: { user: { email: users.email, firstName: users.firstName, lastName: users.lastName, phone: users.phone, role: users.role } }, isSuccessful: true });
         // res.status(200).json({ data: { access_token: token, user: { email: users.email, firstName: users.firstName, lastName: users.lastName, phone: users.phone, role: users.role } }, message: "User login successfully.", isSuccessful: true });
     } catch (error) {
         console.log(`Error on user login request. Error: ${JSON.stringify(error)}`.underline.red);
@@ -64,18 +64,11 @@ const login = async (req, res) => {
 }
 
 const protect = async (req, res) => {
-    const token = req.cookies.authToken;
-
-    if (!token) {
-        return res.status(401).json({ error: "Unauthorized" });
-    }
-
     try {
-        const user = jwt.verify(token, secretKey);
-
-        res.json({ message: "Welcome!", user });
-    } catch (err) {
-        res.status(403).json({ error: "Invalid or expired token" });
+        res.status(200).json({ message: "Successfully verified authentication.", data: { isAuth: true }, isSuccessful: true });
+    } catch (error) {
+        console.log(`Error on verify authentication request. Error: ${JSON.stringify(error)}`.underline.red);
+        res.status(error?.status || 500).json({ message: error.message || "Somethings wen wrong!", isSuccessful: false });
     }
 }
 
@@ -91,7 +84,7 @@ const logout = async (req, res) => {
             throw error;
         }
 
-        res.clearCookie("authToken", {
+        res.clearCookie("access_token", {
             httpOnly: true,
             secure: true,
             sameSite: "strict",

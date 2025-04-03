@@ -1,16 +1,24 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { verifyAuthAsync } from "../../features/auth/authSlice";
 
 const ProtectedRoute = ({ children }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const auth = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if (!auth.token) {
+        if (auth.isAuth === null) {
+            dispatch(verifyAuthAsync());
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!auth.isAuth) {
             navigate('/login', { replace: true });
         }
-    }, [auth.token, navigate]);
+    }, [auth.isAuth, navigate]);
 
     return children;
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
@@ -14,6 +14,7 @@ const schema = yup
     .required()
 
 const Login = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     let auth = useSelector((state) => state.auth)
 
@@ -33,6 +34,9 @@ const Login = () => {
 
     const onSubmit = async (data) => {
         dispatch(loginAsync(data))
+        setTimeout(() => {
+            navigate('/dashboard')
+        }, 200);
     }
 
     return (
